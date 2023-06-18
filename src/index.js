@@ -1,6 +1,6 @@
 const express = require('express')
 const app = express()
-const bookmyshow = require('./routes/bookmyshow')
+const bookmyshow = require('./routes/bookmyshowrouter')
 const { Sequelize } = require('sequelize');
 require('dotenv').config();
 const PORT =  process.env.PORT || 5055
@@ -10,7 +10,7 @@ app.get('/',async(req,res)=>{
   res.send('helllo')
 })
 
-app.use('/api/v1/bookmyshow', bookmyshow )
+app.use('/api/v1', bookmyshow)
 app.use(express.json())
 const sequelize = new Sequelize('postgres://localhost:5432/postgres')
 
