@@ -5,13 +5,10 @@ const { Sequelize } = require('sequelize');
 require('dotenv').config();
 const PORT =  process.env.PORT || 5055
 
-app.get('/',async(req,res)=>{
-  console.log('request generated at root route')
-  res.send('helllo')
-})
+app.use(express.json())
 
 app.use('/api/v1', bookmyshow)
-app.use(express.json())
+
 const sequelize = new Sequelize('postgres://localhost:5432/postgres')
 
 const connectDb= async()=>{
@@ -22,6 +19,12 @@ const connectDb= async()=>{
     console.error('Unable to connect to the database:', error);
   }
 }
+
+app.get('/',async(req,res)=>{
+  console.log('request generated at root route')
+  res.send('helllo')
+})
+
 connectDb()
 
 

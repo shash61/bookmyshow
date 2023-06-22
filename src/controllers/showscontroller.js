@@ -36,6 +36,19 @@ const getAllShows = async (req,res)=>{
   }
 }
 
+const bookShow = async(req,res)=>{
+  const errors = validationResult(req).array()
+  console.log(req.body,errors)
+  
+  if(errors.length>0){
+    res.status(422).send({err:errors})
+  }
+  else{
+    res.status(200).send('hurray')
+  }
+}
+
 module.exports = {
-  getAllShows
+  getAllShows,
+  bookShow
 }

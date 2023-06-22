@@ -14,10 +14,11 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Seats.init({
-    position: DataTypes.INTEGER
+    position: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'Seats',
+    timestamps: true
   });
   return Seats;
 };
