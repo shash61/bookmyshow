@@ -44,7 +44,54 @@ const bookShow = async(req,res)=>{
     res.status(422).send({err:errors})
   }
   else{
-    res.status(200).send('hurray')
+    try{
+      // check if by chance any seat is already booked for particular show
+      // if not then continue else throw err pls select another seat as it is already booked
+      const {seat_id, user_id, show_id}=req.body
+      console.log(db.Bookings.associations,'association')
+     const res= await db.sequelize.transaction(async(t)=>{
+      const bookedSeat = await db.Bookings.findOne({
+        where:{
+          [Op.and]:[
+            {seat_id: seat_id},
+            {show_id: show_id}
+          ]
+        }
+      },{transaction: t})
+      console.log(bookedSeat,'seatfounnd')
+      if(!bookedSeat){
+       const booking = await db.Bookings.create({
+          ...req.body
+        },{
+          transaction:t,
+          lock: t.LOCK.UPDATE
+        })
+
+        console.log(booking,'booked')
+        const show= await db.Shows.findOne({
+          where:{
+            id: show_id
+          }
+        },{transaction:t})
+        const decrementedSeats = await show.decrement('seats_remaining', {by:1},{transaction:t})
+        console.log(decrementedSeats,'seats updated')
+
+      }
+      else {
+        throw new Error('Seat is already booked')
+        // res.status(409).send({err: 'seat is already booked, please select another seat'})
+      }
+    })
+    res.status(200).send(res)
+  }
+    catch(err){
+      console.log(err)
+      if (err.message === 'Seat is already booked') {
+        res.status(409).send({ error: err.message });
+      } else {
+        res.status(500).send({ error: err });
+      }
+    }
   }
 }
 
