@@ -3,7 +3,7 @@ const app = express()
 const bookmyshow = require('./routes/bookmyshowrouter')
 const { Sequelize } = require('sequelize');
 require('dotenv').config();
-const PORT =  process.env.PORT || 5055
+const PORT =  process.env.PORT || 9200
 
 app.use(express.json())
 

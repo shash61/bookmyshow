@@ -1,7 +1,5 @@
 const { validationResult } = require("express-validator")
-const Theater = require('../models/theater')
-const { Sequelize, DataTypes } = require('sequelize');
-const sequelize = new Sequelize('postgres://localhost:5432/postgres')
+const db = require("../models");
 
 const getAllTheaters = async(req,res)=>{
 const errors = validationResult(req).array()
@@ -12,7 +10,7 @@ if(errors.length>0){
 }
 else{
   try{
-    const theaters = await Theater(sequelize,DataTypes).findAll({
+    const theaters = await db.Theater.findAll({
       where:{
         city: req.query.city
       }

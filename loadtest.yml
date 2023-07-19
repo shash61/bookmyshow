@@ -1,0 +1,14 @@
+config:
+  target: "http://localhost:9200"
+  phases:
+    - duration: 60
+      arrivalRate: 1000
+  defaults:
+    headers:
+      Content-Type: "application/json"
+scenarios:
+  - name: "Test API Endpoint"
+    flow:
+      - think: 2
+      - get:
+          url: "/api/v1/theaters?city={{ $env.CITY }}"

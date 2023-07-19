@@ -17,9 +17,7 @@ const getAllShows = async (req,res)=>{
       const shows = await db.Shows.findAll({
         where:{
           [Op.and]: [
-            db.sequelize.literal(`date_part('year', "Shows"."show_time") = ${year}`),
-            db.sequelize.literal(`date_part('month', "Shows"."show_time") = ${month}`),
-            db.sequelize.literal(`date_part('doy', "Shows"."show_time") = ${dayOfYear}`),
+            db.sequelize.where(db.sequelize.fn('Date',db.sequelize.col('show_time')),req.query.selected_date),
             {theater_id: req.query.theater_id}
           ]
         },
